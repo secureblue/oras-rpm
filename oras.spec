@@ -38,10 +38,17 @@ for cmd in cmd/* ; do
   %gobuild -o %{gobuilddir}/bin/$(basename $cmd) %{goipath}/$cmd
 done
 
+mkdir -p completions/bash completions/fish
+%{gobuilddir}/bin/oras completion bash >completions/bash/oras
+%{gobuilddir}/bin/oras completion fish >completions/fish/oras.fish
+
 %install
 %go_vendor_license_install -c %{S:2}
 install -m 0755 -vd                     %{buildroot}%{_bindir}
 install -m 0755 -vp %{gobuilddir}/bin/* %{buildroot}%{_bindir}/
+
+install -Dp -m 0644 -t %{buildroot}%{_datadir}/bash-completion/completions completions/bash/*
+install -Dp -m 0644 -t %{buildroot}%{_datadir}/fish/vendor_completions.d completions/fish/*.fish
 
 %check
 %go_vendor_license_check -c %{S:2}
@@ -53,7 +60,8 @@ install -m 0755 -vp %{gobuilddir}/bin/* %{buildroot}%{_bindir}/
 %doc docs CODE_OF_CONDUCT.md CONTRIBUTING.md MAINTAINERS.md OWNERS.md README.md
 %doc RELEASING.md SECURITY.md
 %{_bindir}/oras
-
+%{_datadir}/bash-completion/completions/oras
+%{_datadir}/fish/vendor_completions.d/oras.fish
 
 %changelog
 %autochangelog
