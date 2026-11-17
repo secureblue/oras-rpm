@@ -3,7 +3,7 @@
 
 %global goipath         oras.land/oras
 %global forgeurl        https://github.com/oras-project/oras
-Version:                1.3.6
+Version:                1.4.0
 
 %gometa -L -f
 
